@@ -1,0 +1,25 @@
+{
+  "name": "binary-testbed-vercel-pkg",
+  "version": "0.0.0",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thefrontside/node-binary-testbed.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thefrontside/node-binary-testbed/issues"
+  },
+  "homepage": "https://github.com/thefrontside/node-binary-testbed#readme",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "pkg ../file-interactor.js --out-path dist"
+  },
+  "dependencies": {
+    "pkg": "^5.2.1"
+  },
+  "volta": {
+    "extends": "../package.json"
+  }
+}

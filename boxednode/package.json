@@ -1,0 +1,25 @@
+{
+  "name": "binary-testbed-boxednode",
+  "version": "0.0.0",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thefrontside/node-binary-testbed.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thefrontside/node-binary-testbed/issues"
+  },
+  "homepage": "https://github.com/thefrontside/node-binary-testbed#readme",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "boxednode -s ../file-interactor.js -t ./dist/file-interactor --node-version 14"
+  },
+  "dependencies": {
+    "boxednode": "^1.10.2"
+  },
+  "volta": {
+    "extends": "../package.json"
+  }
+}
