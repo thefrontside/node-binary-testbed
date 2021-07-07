@@ -18,5 +18,8 @@
   "volta": {
     "node": "14.17.1",
     "npm": "7.17.0"
+  },
+  "devDependencies": {
+    "covector": "^0.7.1"
   }
 }

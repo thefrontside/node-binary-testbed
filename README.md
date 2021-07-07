@@ -8,12 +8,12 @@ Each of these folders is an npm package that will build a binary from your nodej
 In each folder after creating the binary, try:
 
 ```
-> ./file-interactor import script.mjs
+> ./file-interactor import test.mjs
 esm boop!
 
-> ./file-interactor require script.cjs
+> ./file-interactor require test.cjs
 cjs boop!
 
-> ./file-interactor read script.mjs
+> ./file-interactor read test.mjs
 <this readme text>
 ```

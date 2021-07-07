@@ -1,0 +1,32 @@
+{
+  "gitSiteUrl": "https://github.com/thefrontside/node-binary-testbed/",
+  "pkgManagers": {
+    "javascript": {
+      "version": true,
+      "getPublishedVersion": "git log v${ pkgFile.version } -1 --pretty=%Cgreen${ pkgFile.version } || echo \"not published yet\"",
+      "publish": "echo boop"
+    }
+  },
+  "packages": {
+    "binary-testbed-caxa": {
+      "path": "./caxa",
+      "manager": "javascript",
+      "releaseTag": "caxa-v${ pkgFile.version }"
+    },
+    "binary-testbed-boxednode": {
+      "path": "./boxednode",
+      "manager": "javascript",
+      "publish": false
+    },
+    "binary-testbed-nexe": {
+      "path": "./nexe",
+      "manager": "javascript",
+      "publish": false
+    },
+    "binary-testbed-vercel-pkg": {
+      "path": "./vercel-pkg",
+      "manager": "javascript",
+      "publish": false
+    }
+  }
+}
