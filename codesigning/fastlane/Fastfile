@@ -15,9 +15,18 @@
 
 default_platform(:macos)
 
+# https://appstoreconnect.apple.com/access/api
+# if running locally, use this format
+# app_store_connect_api_key(
+#   key_id: "[key]",
+#   issuer_id: "[id]",
+#   key_filepath: "/path/to/key.p8"
+# )
 
-app_store_connect_api_key(
-  key_id: "8MXL67G25U",
-  issuer_id: "69a6de84-c7ac-47e3-e053-5b8c7c11a4d1",
-  key_filepath: "~/Downloads/AuthKey_8MXL67G25U.p8"
-)
+app_store_connect_api_key
+# in CI, we use the env vars
+# LANG=UTF-8 LC_ALL=UTF-8
+# APP_STORE_CONNECT_API_KEY_KEY_ID=“xxxxxx”
+# APP_STORE_CONNECT_API_KEY_ISSUER_ID=“xxxxxx”
+# APP_STORE_CONNECT_API_KEY_KEY="-----BEGIN EC PRIVATE KEY-----\nxxxxxxxxx\n-----END EC PRIVATE KEY-----” 
+# APP_STORE_CONNECT_API_KEY_IN_HOUSE=false # optional but might be needed in match
