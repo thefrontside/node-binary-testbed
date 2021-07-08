@@ -1,3 +1,5 @@
+name: build binaries
+
 on:
   pull_request:
 
@@ -30,6 +32,7 @@ jobs:
         working-directory: codesigning
         run: |
           bundle install
+          fastlane spaceauth -u apple@frontside.com
           fastlane match development
       - name: sign the binary (on macos)
         if: ${{ matrix.platform == 'macos' }}
