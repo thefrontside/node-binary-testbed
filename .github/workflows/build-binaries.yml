@@ -1,0 +1,42 @@
+name: version or publish
+
+on:
+  pull_request:
+
+jobs:
+  build-binaries:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        folder: ["caxa"]
+        include:
+          - os: ubuntu-latest
+            platform: linux
+            ext: ""
+          - os: macos-latest
+            platform: macos
+            ext: ".tar.gz"
+          - os: windows-latest
+            platform: windows
+            ext: .exe
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: volta-cli/action@v1
+      - run: npm ci
+        working-directory: ${{ matrix.folder }}
+      - run: npm run build
+        working-directory: ${{ matrix.folder }}
+      - name: tar the binary for upload (on macos)
+        if: ${{ matrix.platform == 'macos' }}
+        shell: bash
+        run: |
+          gtar -C ${{ matrix.folder }}/dist -cvzf ${{ matrix.folder }}/dist/file-interactor.tar.gz file-interactor.app
+      - name: sign the binary (on macos)
+        if: ${{ matrix.platform == 'macos' }}
+        run: |
+          echo sign!
+      - uses: actions/upload-artifact@v2
+        with:
+          name: file-interactor-${{ matrix.platform }}-${{ needs.version-or-release.outputs.version-binary-testbed-caxa }}${{ matrix.ext }}
+          path: ${{ matrix.folder }}/dist/file-interactor${{ matrix.ext }}
