@@ -1,5 +1,3 @@
-name: version or publish
-
 on:
   pull_request:
 
@@ -27,15 +25,21 @@ jobs:
         working-directory: ${{ matrix.folder }}
       - run: npm run build
         working-directory: ${{ matrix.folder }}
+      - name: setup the certs (on macos)
+        if: ${{ matrix.platform == 'macos' }}
+        working-directory: codesigning
+        run: |
+          bundle install
+          fastlane match development
+      - name: sign the binary (on macos)
+        if: ${{ matrix.platform == 'macos' }}
+        run: |
+          codesign -s "The Frontside Software, Inc." ${{ matrix.folder }}/dist/file-interactor.app
       - name: tar the binary for upload (on macos)
         if: ${{ matrix.platform == 'macos' }}
         shell: bash
         run: |
           gtar -C ${{ matrix.folder }}/dist -cvzf ${{ matrix.folder }}/dist/file-interactor.tar.gz file-interactor.app
-      - name: sign the binary (on macos)
-        if: ${{ matrix.platform == 'macos' }}
-        run: |
-          echo sign!
       - uses: actions/upload-artifact@v2
         with:
           name: file-interactor-${{ matrix.platform }}-${{ needs.version-or-release.outputs.version-binary-testbed-caxa }}${{ matrix.ext }}
