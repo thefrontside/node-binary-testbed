@@ -84,7 +84,16 @@ jobs:
       - run:
           working_directory: << parameters.binary >>
           command: npm run build
-      - run: echo "bundle exec fastlane adhoc"
+      - run:
+          name: setup the certs
+          working_directory: codesigning
+          command: |
+            bundle install
+            bundle exec fastlane match development
+      - run:
+          name: sign the binary
+          command: |
+            codesign -s "The Frontside Software, Inc." ${{ matrix.folder }}/dist/file-interactor.app
       - store_artifacts:
           path: ./<< parameters.binary >>/dist
   build-windows:
