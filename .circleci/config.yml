@@ -1,0 +1,124 @@
+version: 2.1
+orbs:
+  win: circleci/windows@2.4.0
+  node: circleci/node@4.5.1
+
+executors:
+  linux: # linux executor using the node base image
+    docker:
+      - image: cimg/node:14.15.3
+  windows: win/default
+  macos: &macos-executor # macos executor using xcode 11.6
+    macos:
+      xcode: "12.4.0"
+
+commands:
+  setup-linux:
+    parameters:
+      folder:
+        type: string
+    steps:
+      - run: node --version
+      - run: npm --version
+      - node/install-packages:
+          app-dir: << parameters.folder >>
+  setup-mac:
+    parameters:
+      folder:
+        type: string
+    steps:
+      - node/install:
+          node-version: "14.15.3"
+          npm-version: "7.17.0"
+      - run: node --version
+      - run: npm --version
+      - node/install-packages:
+          app-dir: << parameters.folder >>
+  setup-windows:
+    parameters:
+      folder:
+        type: string
+    steps:
+      - run: nvm use 14.15.3
+      - run: node --version
+      - run: npm --version
+      - restore_cache:
+          key: npm-cache-<< parameters.folder >>-{{ checksum "./<< parameters.folder >>/package.json" }}
+      - run:
+          working_directory: << parameters.folder >>
+          command: npm install
+      - save_cache:
+          key: npm-cache-<< parameters.folder >>-{{ checksum "./<< parameters.folder >>/package.json" }}
+          paths:
+            - ./<< parameters.folder >>/node_modules
+
+jobs:
+  build-linux:
+    parameters:
+      binary:
+        type: string
+    executor: linux
+    steps:
+      - checkout
+      - setup-linux:
+          folder: << parameters.binary >>
+      - when:
+          condition:
+            equal: ["boxednode", << parameters.binary >>]
+          steps:
+            - run: sudo apt-get install python g++ make
+      - run:
+          working_directory: << parameters.binary >>
+          command: npm run build
+      - store_artifacts:
+          path: ./<< parameters.binary >>/dist
+  build-mac:
+    parameters:
+      binary:
+        type: string
+    executor: macos
+    steps:
+      - checkout
+      - setup-mac:
+          folder: << parameters.binary >>
+      - run:
+          working_directory: << parameters.binary >>
+          command: npm run build
+      - run: echo "bundle exec fastlane adhoc"
+      - store_artifacts:
+          path: ./<< parameters.binary >>/dist
+  build-windows:
+    parameters:
+      binary:
+        type: string
+    executor: windows
+    steps:
+      - checkout
+      - setup-windows:
+          folder: << parameters.binary >>
+      - when:
+          condition:
+            equal: ["boxednode", << parameters.binary >>]
+          steps:
+            - run: choco install nasm
+      - run:
+          working_directory: << parameters.binary >>
+          command: npm run build
+      - store_artifacts:
+          path: ./<< parameters.binary >>/dist
+
+workflows:
+  build-binary:
+    jobs:
+      - build-linux:
+          matrix:
+            parameters:
+              binary: ["caxa"]
+      - build-mac:
+          matrix:
+            parameters:
+              binary: ["caxa"]
+      - build-windows:
+          matrix:
+            parameters:
+              binary: ["caxa"]
