@@ -64,7 +64,7 @@ jobs:
           folder: << parameters.binary >>
       - when:
           condition:
-            equal: ["boxednode", << parameters.binary >> ]
+            equal: ["boxednode", << parameters.binary >>]
           steps:
             - run: sudo apt-get install python g++ make
       - run:
@@ -98,7 +98,7 @@ jobs:
           folder: << parameters.binary >>
       - when:
           condition:
-            equal: ["boxednode", << parameters.binary >> ]
+            equal: ["boxednode", << parameters.binary >>]
           steps:
             - run: choco install nasm
       - run:
@@ -113,12 +113,12 @@ workflows:
       - build-linux:
           matrix:
             parameters:
-              binary: ["boxednode", "caxa", "nexe", "vercel-pkg"]
+              binary: ["caxa"]
       - build-mac:
           matrix:
             parameters:
-              binary: ["boxednode", "caxa", "nexe", "vercel-pkg"]
+              binary: ["caxa"]
       - build-windows:
           matrix:
             parameters:
-              binary: ["boxednode", "caxa", "nexe", "vercel-pkg"]
+              binary: ["caxa"]
