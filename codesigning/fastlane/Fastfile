@@ -10,22 +10,20 @@
 #     https://docs.fastlane.tools/plugins/available-plugins
 #
 
-setup_circle_ci
+default_platform(:mac)
 
-default_platform(:macos)
+platform :mac do
+    before_all do
+      setup_circle_ci
+    end
 
-# https://appstoreconnect.apple.com/access/api
-# if running locally, use this format
-# app_store_connect_api_key(
-#   key_id: "[key]",
-#   issuer_id: "[id]",
-#   key_filepath: "/path/to/key.p8"
-# )
+    desc "ad-hoc build"
+    lane :adhoc do
+      match(type: "adhoc", readonly: true)
+    end
 
-app_store_connect_api_key
-# in CI, we use the env vars
-# LANG=UTF-8 LC_ALL=UTF-8
-# APP_STORE_CONNECT_API_KEY_KEY_ID=“xxxxxx”
-# APP_STORE_CONNECT_API_KEY_ISSUER_ID=“xxxxxx”
-# APP_STORE_CONNECT_API_KEY_KEY="-----BEGIN EC PRIVATE KEY-----\nxxxxxxxxx\n-----END EC PRIVATE KEY-----” 
-# APP_STORE_CONNECT_API_KEY_IN_HOUSE=false # optional but might be needed in match
+    desc "development build"
+    lane :development do
+      match(type: "development")
+    end
+end
