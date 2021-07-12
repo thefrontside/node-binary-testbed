@@ -90,7 +90,7 @@ jobs:
           working_directory: codesigning
           command: |
             bundle install
-            bundle exec fastlane match development --readonly
+            bundle exec fastlane match development --readonly --skip_certificate_matching
       - run:
           name: sign the binary
           command: |

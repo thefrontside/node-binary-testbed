@@ -10,10 +10,9 @@
 #     https://docs.fastlane.tools/plugins/available-plugins
 #
 
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
+setup_circle_ci
 
-default_platform(:mac)
+default_platform(:macos)
 
 # https://appstoreconnect.apple.com/access/api
 # if running locally, use this format
