@@ -13,7 +13,7 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
-default_platform(:macos)
+default_platform(:mac)
 
 # https://appstoreconnect.apple.com/access/api
 # if running locally, use this format
