@@ -22,14 +22,10 @@ default_platform(:macos)
 #   key_filepath: "/path/to/key.p8"
 # )
 
-begin
-    app_store_connect_api_key
-    # in CI, we use the env vars
-    # LANG=UTF-8 LC_ALL=UTF-8
-    # APP_STORE_CONNECT_API_KEY_KEY_ID=“xxxxxx”
-    # APP_STORE_CONNECT_API_KEY_ISSUER_ID=“xxxxxx”
-    # APP_STORE_CONNECT_API_KEY_KEY="-----BEGIN EC PRIVATE KEY-----\nxxxxxxxxx\n-----END EC PRIVATE KEY-----” 
-    # APP_STORE_CONNECT_API_KEY_IN_HOUSE=false # optional but might be needed in match
-rescue => ex
-    UI.error(ex)
-end
+app_store_connect_api_key
+# in CI, we use the env vars
+# LANG=UTF-8 LC_ALL=UTF-8
+# APP_STORE_CONNECT_API_KEY_KEY_ID=“xxxxxx”
+# APP_STORE_CONNECT_API_KEY_ISSUER_ID=“xxxxxx”
+# APP_STORE_CONNECT_API_KEY_KEY="-----BEGIN EC PRIVATE KEY-----\nxxxxxxxxx\n-----END EC PRIVATE KEY-----” 
+# APP_STORE_CONNECT_API_KEY_IN_HOUSE=false # optional but might be needed in match

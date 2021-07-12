@@ -91,6 +91,9 @@ jobs:
           command: |
             bundle install
             bundle exec fastlane match development --readonly
+          environment:
+            MATCH_KEYCHAIN_NAME: "circle"
+            MATCH_KEYCHAIN_PASSWORD: "circle"
       - run:
           name: sign the binary
           command: |
