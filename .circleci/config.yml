@@ -34,6 +34,7 @@ commands:
       - run: npm --version
       - node/install-packages:
           app-dir: << parameters.folder >>
+      - add_ssh_keys
   setup-windows:
     parameters:
       folder:
