@@ -90,11 +90,11 @@ jobs:
           working_directory: codesigning
           command: |
             bundle install
-            bundle exec fastlane match development --readonly --skip_certificate_matching
+            bundle exec fastlane match development --readonly
       - run:
           name: sign the binary
           command: |
-            codesign -s "The Frontside Software, Inc." ${{ matrix.folder }}/dist/file-interactor.app
+            codesign -s "Apple Development: Frontside Devteam (KU2MQ92RHM)" ${{ matrix.folder }}/dist/file-interactor.app
       - store_artifacts:
           path: ./<< parameters.binary >>/dist
   build-windows:
