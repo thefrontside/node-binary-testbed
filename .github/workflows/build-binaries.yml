@@ -27,14 +27,16 @@ jobs:
         working-directory: ${{ matrix.folder }}
       - run: npm run build
         working-directory: ${{ matrix.folder }}
+      - uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: setup the certs (on macos)
         if: ${{ matrix.platform == 'macos' }}
         working-directory: codesigning
         run: |
           bundle install
-          bundle exec fastlane match development
+          bundle exec fastlane development
         env:
-          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.JACOB64_GITHUB_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
           APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
@@ -43,7 +45,7 @@ jobs:
       - name: sign the binary (on macos)
         if: ${{ matrix.platform == 'macos' }}
         run: |
-          codesign -s "The Frontside Software, Inc." ${{ matrix.folder }}/dist/file-interactor.app
+          codesign -s "Apple Development: Frontside Devteam (KU2MQ92RHM)" -v ${{ matrix.folder }}/dist/file-interactor.app
       - name: tar the binary for upload (on macos)
         if: ${{ matrix.platform == 'macos' }}
         shell: bash
