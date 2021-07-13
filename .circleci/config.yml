@@ -94,7 +94,7 @@ jobs:
       - run:
           name: sign the binary
           command: |
-            codesign -s "Apple Development: Frontside Devteam (KU2MQ92RHM)" << parameters.binary >>/dist/file-interactor.app
+            codesign -s "Apple Development: Frontside Devteam (KU2MQ92RHM)" -v << parameters.binary >>/dist/file-interactor.app
       - run:
           name: tar the binary for upload
           command: |
