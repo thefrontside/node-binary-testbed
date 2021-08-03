@@ -35,7 +35,7 @@ jobs:
         working-directory: codesigning
         run: |
           bundle install
-          bundle exec fastlane development
+          bundle exec fastlane developer_id
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
@@ -45,7 +45,7 @@ jobs:
       - name: sign the binary (on macos)
         if: ${{ matrix.platform == 'macos' }}
         run: |
-          codesign -s "Apple Development: Frontside Devteam (KU2MQ92RHM)" -v ${{ matrix.folder }}/dist/file-interactor.app
+          codesign -s "Developer ID Application: The Frontside Software, Inc (K8UJKNAHN9)" -v ${{ matrix.folder }}/dist/file-interactor.app
       - name: tar the binary for upload (on macos)
         if: ${{ matrix.platform == 'macos' }}
         shell: bash

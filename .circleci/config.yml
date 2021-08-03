@@ -90,11 +90,11 @@ jobs:
           working_directory: codesigning
           command: |
             bundle install
-            bundle exec fastlane development
+            bundle exec fastlane developer_id
       - run:
           name: sign the binary
           command: |
-            codesign -s "Apple Development: Frontside Devteam (KU2MQ92RHM)" -v << parameters.binary >>/dist/file-interactor.app
+            codesign -s "Developer ID Application: The Frontside Software, Inc (K8UJKNAHN9)" -v << parameters.binary >>/dist/file-interactor.app
       - run:
           name: tar the binary for upload
           command: |
