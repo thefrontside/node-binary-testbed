@@ -1,0 +1,57 @@
+name: build binaries
+
+on:
+  pull_request:
+
+jobs:
+  build-binaries:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        folder: ["caxa"]
+        include:
+          - os: ubuntu-latest
+            platform: linux
+            ext: ""
+          - os: macos-latest
+            platform: macos
+            ext: ".tar.gz"
+          - os: windows-latest
+            platform: windows
+            ext: .exe
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: volta-cli/action@v1
+      - run: npm ci
+        working-directory: ${{ matrix.folder }}
+      - run: npm run build
+        working-directory: ${{ matrix.folder }}
+      - uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: setup the certs (on macos)
+        if: ${{ matrix.platform == 'macos' }}
+        working-directory: codesigning
+        run: |
+          bundle install
+          bundle exec fastlane developer_id
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
+          APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY }}
+          APP_STORE_CONNECT_API_KEY_IN_HOUSE: false
+      - name: sign the binary (on macos)
+        if: ${{ matrix.platform == 'macos' }}
+        run: |
+          codesign -s "Developer ID Application: The Frontside Software, Inc (K8UJKNAHN9)" -v ${{ matrix.folder }}/dist/file-interactor.app
+      - name: tar the binary for upload (on macos)
+        if: ${{ matrix.platform == 'macos' }}
+        shell: bash
+        run: |
+          gtar -C ${{ matrix.folder }}/dist -cvzf ${{ matrix.folder }}/dist/file-interactor.tar.gz file-interactor.app
+      - uses: actions/upload-artifact@v2
+        with:
+          name: file-interactor-${{ matrix.platform }}-${{ needs.version-or-release.outputs.version-binary-testbed-caxa }}${{ matrix.ext }}
+          path: ${{ matrix.folder }}/dist/file-interactor${{ matrix.ext }}

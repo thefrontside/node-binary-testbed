@@ -1,0 +1,73 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+default_platform(:mac)
+
+platform :mac do
+    before_all do
+      # this sets up the temp keychain
+      setup_circle_ci
+    end
+
+    # This is effectively only useful locally and
+    # likely not worth running in CI.
+    # It doesn't produce an asset and more secure
+    # then an unsigned asset.
+    desc "ad-hoc build"
+    lane :adhoc do
+      match(
+        type: "adhoc",
+        readonly: true,
+        skip_provisioning_profiles: true
+      )
+    end
+
+    # This will sign the asset, but
+    # is intended to be run only on the computer
+    # that signed the asset. You could run this in CI,
+    # disable gatekeeper, and then it would run.
+    # This isn't a proper official deployment strategy
+    # though since we would never recommend a user
+    # disables the gatekeeper.
+    # https://help.apple.com/xcode/mac/current/#/dev9b7736b0e
+    desc "development build"
+    lane :development do
+      match(
+        type: "development",
+        readonly: true,
+        skip_provisioning_profiles: true
+      )
+    end
+
+    # This creates a build that is properly codesigned
+    # and intended to be pushed to the App Store.
+    desc "appstore build"
+    lane :appstore do
+      match(
+        type: "appstore",
+        readonly: true,
+        skip_provisioning_profiles: true
+      )
+    end
+
+    # This creates a build that is properly codesigned
+    # and intended to be delivered to the user by a
+    # method _other_ than the App Store.
+    desc "developer_id build"
+    lane :developer_id do
+      match(
+        type: "developer_id",
+        readonly: true,
+        skip_provisioning_profiles: true
+      )
+    end
+end
